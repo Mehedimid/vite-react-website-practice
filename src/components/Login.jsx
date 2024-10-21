@@ -1,27 +1,31 @@
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { auth } from '../firebasse'
 import { Link } from 'react-router-dom'
+import { AuthContext } from './AuthProvider'
 
 const Login = () => {
   const [err, setErr] = useState("")
-  
+  const {signInUser,user} = useContext(AuthContext)  
+  console.log(user?.email);
   const handleSubmit = e =>{
     e.preventDefault()
     const form = e.target
     const email = form.email.value ;
     const password = form.password.value ;
     
-    signInWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    const user = userCredential.user;
-    console.log(user?.email);
-  })
-  .catch((error) => {
-    const errorMessage = error.message;
-    console.log(errorMessage);
-    setErr(errorMessage)
-  });
+  //   signInWithEmailAndPassword(auth, email, password)
+  // .then((userCredential) => {
+  //   const user = userCredential.user;
+  //   console.log(user?.email);
+  // })
+  // .catch((error) => {
+  //   const errorMessage = error.message;
+  //   console.log(errorMessage);
+  //   setErr(errorMessage)
+  // });
+
+  signInUser(email, password)
   }
 
   const labelClass = "block text-gray-700 text-sm font-bold mb-2";

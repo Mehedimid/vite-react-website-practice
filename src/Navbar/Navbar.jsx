@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { auth } from "../firebasse";
 import { signOut } from "firebase/auth";
+import { AuthContext } from "../components/AuthProvider";
 
 const Navbar = () => {
+  const {user} = useContext(AuthContext)
+  console.log(user?.email);
   const [err, setErr] = useState("");
   const [logOutSuccess, setLogOutSuccess] = useState("");
 
@@ -75,14 +78,14 @@ const Navbar = () => {
         <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
       <div className="navbar-end">
-        <button className="btn" onClick={handleLogOut}>
+        {
+          user ? <button className="btn" onClick={handleLogOut}>
           Log Out
-        </button>
-        {logOutSuccess ? (
-          <p className="text-green-600"> {logOutSuccess} </p>
-        ) : (
-          <p className="text-red-500">{err}</p>
-        )}
+        </button> : <p>go to login</p>
+        }
+        {user ? 
+          <p> {user?.email} </p> : <p></p>
+        }
       </div>
     </div>
   );
