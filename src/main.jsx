@@ -10,6 +10,7 @@ import WaterBottle from "./water bottle/WaterBottle";
 import Navbar from "./Navbar/Navbar";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import AuthProvider from "./components/AuthProvider";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
+    <AuthProvider>
     <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>
 );

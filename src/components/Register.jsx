@@ -1,12 +1,17 @@
-import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword } from "firebase/auth";
-import {app}  from "../firebasse"
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
+import { app } from "../firebasse";
 import { useState } from "react";
 
-
 const Register = () => {
-    const provider = new GoogleAuthProvider()
-    const auth = getAuth(app)
-    const [user, setUser] = useState("")
+  const [err, setErr] = useState("")
+  const provider = new GoogleAuthProvider();
+  const auth = getAuth(app);
+  const [user, setUser] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -15,32 +20,34 @@ const Register = () => {
     const password = e.target.password.value;
 
     createUserWithEmailAndPassword(auth, email, password)
-    .then(res=>{
-      console.log(res);
-      console.log(res.user);
-      console.log(res.user.email);
-      setUser(res.user.email)
-      e.target.reset()
-    })
-    .catch(err=>{
-      console.log(err);
-    })
+      .then((res) => {
+        console.log(res);
+        console.log(res.user);
+        console.log(res.user.email);
+        setUser(res.user.email);
+        e.target.reset();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   const handleGogleLogin = () => {
     console.log("clicked");
     signInWithPopup(auth, provider)
-  .then((result) => {
-    const user = result.user.email;
-    console.log(user);
-  }).catch((error) => {
-    const errorMessage = error.message;
-    console.log(errorMessage);
-  });
-  }
+      .then((result) => {
+        const user = result.user.email;
+        console.log(user);
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        console.log(errorMessage);
+      });
+  };
 
   const labelClass = "block text-gray-700 text-sm font-bold mb-2";
-  const inputClass = "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-blue"
+  const inputClass =
+    "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-blue";
 
   return (
     <div
@@ -128,10 +135,11 @@ const Register = () => {
             </span>
           </button>
         </div>
+        {err && (
+          <p className="text-red-500 font-semibold">{err}</p>
+        )}
+        {user && <h2 className="text-green-500 font-semibold">user email : {user}</h2>}
       </form>
-      {
-        user && <h2>user email : {user}</h2>
-      }
     </div>
   );
 };

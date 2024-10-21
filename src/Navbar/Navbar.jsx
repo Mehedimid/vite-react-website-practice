@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { auth } from "../firebasse";
+import { signOut } from "firebase/auth";
 
 const Navbar = () => {
+  const [err, setErr] = useState("");
+  const [logOutSuccess, setLogOutSuccess] = useState("");
+
   const links = (
     <>
       <li>
@@ -22,9 +27,16 @@ const Navbar = () => {
     </>
   );
 
-  const handleGoogleLogin = ()=>{
-    console.log("handleGoogleLogin here");
-  }
+  const handleLogOut = () => {
+    console.log("hit at handle log out");
+    signOut(auth)
+      .then(() => {
+        setLogOutSuccess("Sign-out successful");
+      })
+      .catch((error) => {
+        setErr(error.message);
+      });
+  };
 
   return (
     <div className="navbar bg-green-200">
@@ -52,7 +64,7 @@ const Navbar = () => {
             tabIndex={0}
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
           >
-           {links}
+            {links}
           </ul>
         </div>
         <a className="btn btn-ghost text-xl">daisyUI</a>
@@ -60,12 +72,17 @@ const Navbar = () => {
 
       {/* === large device links === */}
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          {links}
-        </ul>
+        <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
       <div className="navbar-end">
-        <button className="btn" onClick={handleGoogleLogin}>Google Login</button>
+        <button className="btn" onClick={handleLogOut}>
+          Log Out
+        </button>
+        {logOutSuccess ? (
+          <p className="text-green-600"> {logOutSuccess} </p>
+        ) : (
+          <p className="text-red-500">{err}</p>
+        )}
       </div>
     </div>
   );
